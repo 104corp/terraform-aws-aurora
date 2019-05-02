@@ -184,7 +184,6 @@ resource "aws_rds_cluster_instance" "cluster_instance_0" {
   identifier                   = "${var.identifier_prefix != "" ? format("%s-node-0", var.identifier_prefix) : format("%s-aurora-node-0", var.envname)}"
   cluster_identifier           = "${aws_rds_cluster.default.id}"
   engine                       = "${var.engine}"
-  engine_mode                  = "${var.engine_mode}"
   engine_version               = "${var.engine_version}"
   instance_class               = "${var.instance_type}"
   publicly_accessible          = "${var.publicly_accessible}"
@@ -238,6 +237,7 @@ resource "aws_rds_cluster" "default" {
   engine             = "${var.engine}"
 
   engine_version                      = "${var.engine_version}"
+  engine_mode                         = "${var.engine_mode}"
   master_username                     = "${var.username}"
   master_password                     = "${var.password}"
   final_snapshot_identifier           = "${var.final_snapshot_identifier}-${random_id.server.hex}"
