@@ -223,7 +223,8 @@ resource "aws_rds_cluster_parameter_group" "aurora_cluster_postgres96_parameter_
 | cluster_identifier | The ID of the RDS Cluster |
 | reader_endpoint | A read-only endpoint for the Aurora cluster, automatically load-balanced across replicas |
 
-Development
+## Development
+
 Terraform modules on the Terraform Module Registry are open projects, and community contributions are essential for keeping them great. Please follow our guidelines when contributing changes.
 
 For more information, see our [module contribution guide](https://registry.terraform.io/modules/104corp/aurora/aws/).
