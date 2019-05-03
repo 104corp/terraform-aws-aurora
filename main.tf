@@ -36,7 +36,7 @@
   *
   * ### Aurora 1.x (MySQL 5.6)
   *
-  * 
+  * ```hcl
   * resource "aws_sns_topic" "db_alarms_56" {
   *   name = "aurora-db-alarms-56"
   * }
@@ -75,6 +75,7 @@
   *   family      = "aurora5.6"
   *   description = "test-aurora-56-cluster-parameter-group"
   * }
+  * ```
   *
   * ### Aurora 2.x (MySQL 5.7)
   *
