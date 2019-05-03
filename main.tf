@@ -1,5 +1,7 @@
 /**
-  * # tf-aws-aurora
+  * # AWS Aurora Terraform module
+  *
+  * ![Build Status](https://travis-ci.com/104corp/terraform-aws-aurora.svg?branch=master) ![LicenseBadge](https://img.shields.io/github/license/104corp/terraform-aws-aurora.svg)
   *
   * AWS Aurora DB Cluster & Instance(s) Terraform Module.
   *
@@ -11,6 +13,10 @@
   *  - Optionally RDS 'Enhanced Monitoring' + associated required IAM role/policy (by simply setting the `monitoring_interval` param to > `0`
   *  - Optionally sensible alarms to SNS (high CPU, high connections, slow replication)
   *  - Optionally configure autoscaling for read replicas (MySQL clusters only)
+  *
+  * ## Terraform version
+  *
+  * Terraform version 0.10.3 or newer is required for this module to work.
   *
   * ## Contributing
   *
