@@ -160,6 +160,34 @@
   * ```
   */
 
+// Create DB Cluster
+resource "aws_rds_cluster" "default" {
+  count              = "${var.enabled ? 1 : 0}"
+  cluster_identifier = "${var.identifier_prefix != "" ? format("%s-cluster", var.identifier_prefix) : format("%s-aurora-cluster", var.envname)}"
+  availability_zones = ["${var.azs}"]
+
+  engine         = "${var.engine}"
+  engine_version = "${var.engine_version}"
+  engine_mode    = "${var.engine_mode}"
+
+  database_name                       = "${var.database_name}"
+  master_username                     = "${var.username}"
+  master_password                     = "${var.password}"
+  final_snapshot_identifier           = "${var.final_snapshot_identifier}-${random_id.server.hex}"
+  skip_final_snapshot                 = "${var.skip_final_snapshot}"
+  backup_retention_period             = "${var.backup_retention_period}"
+  preferred_backup_window             = "${var.preferred_backup_window}"
+  preferred_maintenance_window        = "${var.preferred_maintenance_window}"
+  port                                = "${var.port}"
+  db_subnet_group_name                = "${aws_db_subnet_group.main.name}"
+  vpc_security_group_ids              = ["${var.security_groups}"]
+  snapshot_identifier                 = "${var.snapshot_identifier}"
+  storage_encrypted                   = "${var.storage_encrypted}"
+  apply_immediately                   = "${var.apply_immediately}"
+  db_cluster_parameter_group_name     = "${var.db_cluster_parameter_group_name}"
+  iam_database_authentication_enabled = "${var.iam_database_authentication_enabled}"
+}
+
 // DB Subnet Group creation
 resource "aws_db_subnet_group" "main" {
   count       = "${var.enabled ? 1 : 0}"
@@ -181,10 +209,12 @@ resource "aws_rds_cluster_instance" "cluster_instance_0" {
     "aws_iam_role_policy_attachment.rds-enhanced-monitoring-policy-attach",
   ]
 
-  identifier                   = "${var.identifier_prefix != "" ? format("%s-node-0", var.identifier_prefix) : format("%s-aurora-node-0", var.envname)}"
-  cluster_identifier           = "${aws_rds_cluster.default.id}"
-  engine                       = "${var.engine}"
-  engine_version               = "${var.engine_version}"
+  engine         = "${var.engine}"
+  engine_version = "${var.engine_version}"
+
+  identifier         = "${var.identifier_prefix != "" ? format("%s-node-0", var.identifier_prefix) : format("%s-aurora-node-0", var.envname)}"
+  cluster_identifier = "${aws_rds_cluster.default.id}"
+
   instance_class               = "${var.instance_type}"
   publicly_accessible          = "${var.publicly_accessible}"
   db_subnet_group_name         = "${aws_db_subnet_group.main.name}"
@@ -227,32 +257,6 @@ resource "aws_rds_cluster_instance" "cluster_instance_n" {
     envname = "${var.envname}"
     envtype = "${var.envtype}"
   }
-}
-
-// Create DB Cluster
-resource "aws_rds_cluster" "default" {
-  count              = "${var.enabled ? 1 : 0}"
-  cluster_identifier = "${var.identifier_prefix != "" ? format("%s-cluster", var.identifier_prefix) : format("%s-aurora-cluster", var.envname)}"
-  availability_zones = ["${var.azs}"]
-  engine             = "${var.engine}"
-
-  engine_version                      = "${var.engine_version}"
-  engine_mode                         = "${var.engine_mode}"
-  master_username                     = "${var.username}"
-  master_password                     = "${var.password}"
-  final_snapshot_identifier           = "${var.final_snapshot_identifier}-${random_id.server.hex}"
-  skip_final_snapshot                 = "${var.skip_final_snapshot}"
-  backup_retention_period             = "${var.backup_retention_period}"
-  preferred_backup_window             = "${var.preferred_backup_window}"
-  preferred_maintenance_window        = "${var.preferred_maintenance_window}"
-  port                                = "${var.port}"
-  db_subnet_group_name                = "${aws_db_subnet_group.main.name}"
-  vpc_security_group_ids              = ["${var.security_groups}"]
-  snapshot_identifier                 = "${var.snapshot_identifier}"
-  storage_encrypted                   = "${var.storage_encrypted}"
-  apply_immediately                   = "${var.apply_immediately}"
-  db_cluster_parameter_group_name     = "${var.db_cluster_parameter_group_name}"
-  iam_database_authentication_enabled = "${var.iam_database_authentication_enabled}"
 }
 
 // Geneate an ID when an environment is initialised
